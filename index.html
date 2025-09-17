@@ -326,22 +326,46 @@
                     <span data-en="We respond within 24 hours" data-it="Rispondiamo entro 24 ore" data-fr="Nous répondons sous 24 heures">We respond within 24 hours</span>
                 </div>
             </div>
-            <!-- modify this form HTML and place wherever you want your form -->
-<form
-  action="https://formspree.io/f/movnoprp"
-  method="POST"
->
+            <form action="https://formspree.io/f/movnoprp" method="POST" class="contact-form">
   <label>
-    Your email:
-    <input type="email" name="email">
+    Name:
+    <input type="text" name="name" required>
+  </label>
+
+  <label>
+    Email:
+    <input type="email" name="email" required>
+  </label>
+
+  <label>
+    Phone:
+    <input type="tel" name="phone">
+  </label>
+
+  <label>
+    Service Needed:
+    <select name="service">
+      <option value="Photography">Photography</option>
+      <option value="Videography">Videography</option>
+      <option value="Editing">Editing</option>
+      <option value="Other">Other</option>
+    </select>
   </label>
   <label>
-    Your message:
-    <textarea name="message"></textarea>
+    Event Date:
+    <input type="date" name="event_date">
   </label>
-  <!-- your other form fields go here -->
-  <button type="submit">Send</button>
+
+  <label>
+    Message:
+    <textarea name="message" required></textarea>
+  </label>
+
+  <button type="submit" class="btn-submit">
+    <i class="fas fa-paper-plane"></i> Send Request
+  </button>
 </form>
+
 
             <div class="contact-content">
                 <div class="quick-contact">
