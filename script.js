@@ -702,3 +702,262 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeLazyLoading();
     }, 100);
 });
+// Portfolio Lightbox Functionality
+function initializePortfolioLightbox() {
+    // Create lightbox HTML structure
+    const lightboxHTML = `
+        <div id="portfolioLightbox" class="lightbox" style="display: none;">
+            <div class="lightbox-overlay" onclick="closeLightbox()"></div>
+            <div class="lightbox-content">
+                <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+                <button class="lightbox-prev" onclick="previousImage()">‹</button>
+                <button class="lightbox-next" onclick="nextImage()">›</button>
+                <img id="lightboxImage" src="" alt="">
+                <div class="lightbox-info">
+                    <h3 id="lightboxTitle"></h3>
+                    <p id="lightboxDescription"></p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add lightbox to page
+    if (!document.getElementById('portfolioLightbox')) {
+        document.body.insertAdjacentHTML('beforeend', lightboxHTML);
+    }
+    
+    // Add CSS for lightbox
+    addLightboxCSS();
+    
+    // Get all portfolio items and add click functionality
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    let currentImageIndex = 0;
+    let imageData = [];
+    
+    // Collect image data
+    portfolioItems.forEach((item, index) => {
+        const img = item.querySelector('img');
+        const titleElement = item.querySelector('.portfolio-info h3');
+        const descElement = item.querySelector('.portfolio-info p');
+        
+        imageData.push({
+            src: img.src,
+            alt: img.alt,
+            title: titleElement.textContent,
+            description: descElement.textContent
+        });
+        
+        // Add click event to portfolio item
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', () => openLightbox(index));
+    });
+    
+    // Lightbox functions
+    window.openLightbox = function(index) {
+        currentImageIndex = index;
+        showImage(index);
+        document.getElementById('portfolioLightbox').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    };
+    
+    window.closeLightbox = function() {
+        document.getElementById('portfolioLightbox').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    };
+    
+    window.nextImage = function() {
+        currentImageIndex = (currentImageIndex + 1) % imageData.length;
+        showImage(currentImageIndex);
+    };
+    
+    window.previousImage = function() {
+        currentImageIndex = (currentImageIndex - 1 + imageData.length) % imageData.length;
+        showImage(currentImageIndex);
+    };
+    
+    function showImage(index) {
+        const data = imageData[index];
+        document.getElementById('lightboxImage').src = data.src;
+        document.getElementById('lightboxImage').alt = data.alt;
+        document.getElementById('lightboxTitle').textContent = data.title;
+        document.getElementById('lightboxDescription').textContent = data.description;
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        const lightbox = document.getElementById('portfolioLightbox');
+        if (lightbox.style.display === 'flex') {
+            switch(e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowRight':
+                    nextImage();
+                    break;
+                case 'ArrowLeft':
+                    previousImage();
+                    break;
+            }
+        }
+    });
+}
+
+function addLightboxCSS() {
+    if (document.getElementById('lightboxCSS')) return;
+    
+    const css = `
+        <style id="lightboxCSS">
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeIn 0.3s ease forwards;
+        }
+        
+        .lightbox-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: scale(0.8);
+            animation: scaleIn 0.3s ease forwards;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+            z-index: 3001;
+            transition: all 0.3s ease;
+        }
+        
+        .lightbox-close:hover {
+            color: #d4af37;
+            transform: rotate(90deg);
+        }
+        
+        .lightbox-prev,
+        .lightbox-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 15px 20px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            background: rgba(212, 175, 55, 0.8);
+            border-color: #d4af37;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .lightbox-prev { left: -80px; }
+        .lightbox-next { right: -80px; }
+        
+        #lightboxImage {
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        .lightbox-info {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            max-width: 600px;
+        }
+        
+        .lightbox-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #d4af37;
+        }
+        
+        .lightbox-info p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .portfolio-instruction {
+            margin-top: 20px;
+            padding: 15px 25px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            color: #d4af37;
+        }
+        
+        .click-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(212, 175, 55, 0.9);
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .portfolio-item:hover .click-indicator {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes scaleIn { to { transform: scale(1); } }
+        
+        @media (max-width: 768px) {
+            .lightbox-prev, .lightbox-next { display: none; }
+            .lightbox-close { top: -40px; font-size: 2rem; }
+            #lightboxImage { max-height: 60vh; }
+        }
+        </style>
+    `;
+    
+    document.head.insertAdjacentHTML('beforeend', css);
+}
+
+// Add to existing DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        initializePortfolioLightbox();
+    }, 500);
+});
