@@ -327,45 +327,6 @@
                 </div>
             </div>
             <form action="https://formspree.io/f/movnoprp" method="POST" class="contact-form">
-  <label>
-    Name:
-    <input type="text" name="name" required>
-  </label>
-
-  <label>
-    Email:
-    <input type="email" name="email" required>
-  </label>
-
-  <label>
-    Phone:
-    <input type="tel" name="phone">
-  </label>
-
-  <label>
-    Service Needed:
-    <select name="service">
-      <option value="Photography">Photography</option>
-      <option value="Videography">Videography</option>
-      <option value="Editing">Editing</option>
-      <option value="Other">Other</option>
-    </select>
-  </label>
-  <label>
-    Event Date:
-    <input type="date" name="event_date">
-  </label>
-
-  <label>
-    Message:
-    <textarea name="message" required></textarea>
-  </label>
-
-  <button type="submit" class="btn-submit">
-    <i class="fas fa-paper-plane"></i> Send Request
-  </button>
-</form>
-
 
             <div class="contact-content">
                 <div class="quick-contact">
@@ -411,17 +372,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="budget" data-en="Budget Range" data-it="Fascia di Budget" data-fr="Fourchette Budget">Budget Range</label>
-                            <select id="budget" name="budget">
-                                <option value="" data-en="Select budget range..." data-it="Seleziona fascia di budget..." data-fr="Sélectionnez la fourchette...">Select budget range...</option>
-                                <option value="1000-2500" data-en="€1,000 - €2,500" data-it="€1.000 - €2.500" data-fr="1 000€ - 2 500€">€1,000 - €2,500</option>
-                                <option value="2500-5000" data-en="€2,500 - €5,000" data-it="€2.500 - €5.000" data-fr="2 500€ - 5 000€">€2,500 - €5,000</option>
-                                <option value="5000-10000" data-en="€5,000 - €10,000" data-it="€5.000 - €10.000" data-fr="5 000€ - 10 000€">€5,000 - €10,000</option>
-                                <option value="10000+" data-en="€10,000+" data-it="€10.000+" data-fr="10 000€+">€10,000+</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
                             <label for="date" data-en="Event Date (if applicable)" data-it="Data Evento (se applicabile)" data-fr="Date Événement (si applicable)">Event Date (if applicable)</label>
                             <input type="date" id="date" name="date">
                         </div>
@@ -443,11 +393,11 @@
                                       data-it-placeholder="Descrivi la tua visione, preferenze di stile e requisiti speciali..."
                                       data-fr-placeholder="Décrivez votre vision, préférences de style et exigences spéciales..."></textarea>
                         </div>
-
+                       
                         <button type="submit" class="btn-primary">
                             <span data-en="Send Inquiry" data-it="Invia Richiesta" data-fr="Envoyer Demande">Send Inquiry</span>
                         </button>
-                    </form>
+                    </form action="https://formspree.io/f/movnoprp" method="POST" >
                 </div>
             </div>
         </div>
