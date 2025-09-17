@@ -980,10 +980,4 @@ function openVideoModal(src) {
   modal.style.display = 'flex';
 }
 
-function closeVideoModal() {
-  const modal = document.getElementById('videoModal');
-  const video = document.getElementById('modalVideo');
-  video.pause();
-  video.src = '';
-  modal.style.display = 'none';
-}
+
