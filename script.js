@@ -650,6 +650,17 @@ function filterPortfolio(category) {
         }
     });
 }
+  
+function openVideo(src) {
+  const videoWindow = window.open('', '_blank');
+  videoWindow.document.write(`
+    <video controls autoplay style="width:100%; height:100%">
+      <source src="${src}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  `);
+}
+
 
 // Performance Optimization
 function optimizePerformance() {
@@ -746,7 +757,8 @@ function initializePortfolioLightbox() {
             title: titleElement.textContent,
             description: descElement.textContent
         });
-        
+
+   
         // Add click event to portfolio item
         item.style.cursor = 'pointer';
         item.addEventListener('click', () => openLightbox(index));
