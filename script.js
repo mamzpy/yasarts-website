@@ -973,11 +973,4 @@ document.addEventListener('DOMContentLoaded', function() {
         initializePortfolioLightbox();
     }, 500);
 });
-function openVideoModal(src) {
-  const modal = document.getElementById('videoModal');
-  const video = document.getElementById('modalVideo');
-  video.src = src;
-  modal.style.display = 'flex';
-}
-
 
