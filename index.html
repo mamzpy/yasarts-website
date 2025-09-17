@@ -205,7 +205,8 @@
                     </div>
                 </div>
             </div>
-            <div class="portfolio-item" onclick="openVideo('videos/1.mp4')">
+            <div class="portfolio-item" onclick="openVideoModal('videos/1.mp4')">
+
   <img src="images/video-thumbnail.jpg" alt="Fashion Video">
   <div class="portfolio-overlay">
     <div class="portfolio-info">
@@ -476,5 +477,16 @@
     </footer>
 
     <script src="script.js"></script>
+
+    <div id="videoModal" class="video-modal">
+  <div class="video-content">
+    <span class="close" onclick="closeVideoModal()">&times;</span>
+    <video id="modalVideo" controls autoplay>
+      <source src="" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</div>
+
 </body>
 </html>
