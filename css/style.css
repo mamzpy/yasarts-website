@@ -829,6 +829,9 @@ h3 { font-size: 1.8rem; }
 /* Video Gallery Section CSS - Add this to your style.css file */
 
 /* Videos Section */
+/* YouTube Video Gallery CSS - Replace your video CSS with this */
+
+/* Videos Section */
 .videos {
     padding: 100px 0;
     background: var(--accent-color);
@@ -846,42 +849,44 @@ h3 { font-size: 1.8rem; }
     color: var(--primary-color);
 }
 
-.video-grid {
+/* YouTube Video Grid */
+.youtube-video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 30px;
     margin-top: 60px;
 }
 
-.video-item {
+.youtube-video-item {
     position: relative;
     border-radius: 15px;
     overflow: hidden;
     aspect-ratio: 16/9;
-    cursor: pointer;
     transition: var(--transition);
     box-shadow: var(--shadow);
+    background: #000;
 }
 
-.video-item:hover {
+.youtube-video-item:hover {
     transform: translateY(-10px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-.video-container {
+.youtube-video-container {
     position: relative;
     width: 100%;
     height: 100%;
 }
 
-.video-item video {
+.youtube-video-item iframe {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    transition: var(--transition);
+    border: none;
+    border-radius: 15px;
 }
 
-.video-overlay {
+/* YouTube Video Overlay */
+.youtube-video-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -889,208 +894,170 @@ h3 { font-size: 1.8rem; }
     bottom: 0;
     background: linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0.1) 0%,
-        rgba(0, 0, 0, 0.3) 50%,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.1) 40%,
         rgba(0, 0, 0, 0.8) 100%
     );
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: 30px;
+    opacity: 0;
+    transition: var(--transition);
+    pointer-events: none; /* Allow clicks to pass through to iframe */
+}
+
+.youtube-video-item:hover .youtube-video-overlay {
+    opacity: 1;
+}
+
+.youtube-video-info h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.youtube-video-info p {
+    color: var(--primary-color);
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Professional styling enhancements */
+.youtube-video-item::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: var(--gradient);
+    border-radius: 17px;
+    z-index: -1;
     opacity: 0;
     transition: var(--transition);
 }
 
-.video-item:hover .video-overlay {
+.youtube-video-item:hover::before {
     opacity: 1;
 }
 
-.video-info {
-    align-self: flex-start;
-}
-
-.video-info h3 {
-    color: white;
-    font-size: 1.5rem;
-    margin-bottom: 8px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.video-info p {
-    color: var(--primary-color);
-    font-weight: 500;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.play-button {
-    align-self: center;
+/* YouTube Play Button Enhancement */
+.youtube-video-item::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 80px;
     height: 80px;
     background: rgba(212, 175, 55, 0.9);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    opacity: 0;
+    transition: var(--transition);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.youtube-video-item:hover::after {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* Add play icon */
+.youtube-video-container::before {
+    content: '\f04b'; /* Font Awesome play icon */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-45%, -50%); /* Slight offset for visual centering */
     color: white;
     font-size: 2rem;
-    transition: var(--transition);
-    backdrop-filter: blur(10px);
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    transform: scale(0.8);
-}
-
-.video-item:hover .play-button {
-    transform: scale(1);
-    background: var(--primary-color);
-    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
-}
-
-.play-button i {
-    margin-left: 4px; /* Slight offset to center play icon visually */
-}
-
-/* Video Modal/Lightbox */
-.video-lightbox {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.95);
-    z-index: 4000;
-    display: none;
-    align-items: center;
-    justify-content: center;
+    z-index: 11;
     opacity: 0;
-    animation: fadeIn 0.3s ease forwards;
+    transition: var(--transition);
+    pointer-events: none;
 }
 
-.video-lightbox-content {
-    position: relative;
-    max-width: 90%;
-    max-height: 90%;
-    width: 100%;
-    aspect-ratio: 16/9;
-    transform: scale(0.8);
-    animation: scaleIn 0.3s ease forwards;
+.youtube-video-item:hover .youtube-video-container::before {
+    opacity: 1;
 }
 
-.video-lightbox video {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-}
-
-.video-lightbox-close {
-    position: absolute;
-    top: -60px;
-    right: 0;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 3rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.video-lightbox-close:hover {
-    color: var(--primary-color);
-    transform: rotate(90deg) scale(1.1);
-}
-
-.video-lightbox-info {
-    position: absolute;
-    bottom: -80px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    color: white;
-}
-
-.video-lightbox-info h3 {
-    font-size: 1.8rem;
-    margin-bottom: 10px;
-    color: var(--primary-color);
-}
-
-.video-lightbox-info p {
-    font-size: 1.2rem;
-    opacity: 0.9;
-}
-
-/* Navigation Update - Add Videos to menu */
-.nav-menu li:nth-child(3)::after {
-    content: "";
-}
-
-/* Responsive Design for Videos */
+/* Responsive Design */
 @media (max-width: 768px) {
-    .video-grid {
+    .youtube-video-grid {
         grid-template-columns: 1fr;
         gap: 20px;
     }
     
-    .video-item {
+    .youtube-video-item {
         aspect-ratio: 16/9;
     }
     
-    .video-overlay {
+    .youtube-video-overlay {
         padding: 20px;
-        opacity: 1; /* Always show on mobile */
+        opacity: 1; /* Always show on mobile for better UX */
         background: linear-gradient(
             to bottom,
-            rgba(0, 0, 0, 0.3) 0%,
-            rgba(0, 0, 0, 0.6) 100%
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0.3) 60%,
+            rgba(0, 0, 0, 0.8) 100%
         );
     }
     
-    .play-button {
-        width: 60px;
-        height: 60px;
-        font-size: 1.5rem;
-        transform: scale(1); /* Always full size on mobile */
-    }
-    
-    .video-info h3 {
+    .youtube-video-info h3 {
         font-size: 1.3rem;
     }
     
-    .video-lightbox-content {
-        max-width: 95%;
-        max-height: 80%;
+    .youtube-video-info p {
+        font-size: 0.9rem;
     }
     
-    .video-lightbox-close {
-        top: -50px;
-        font-size: 2.5rem;
+    /* Mobile play button always visible */
+    .youtube-video-item::after {
+        opacity: 0.6;
+        transform: translate(-50%, -50%);
     }
     
-    .video-lightbox-info {
-        bottom: -60px;
-    }
-    
-    .video-lightbox-info h3 {
-        font-size: 1.5rem;
-    }
-    
-    .video-lightbox-info p {
-        font-size: 1rem;
+    .youtube-video-container::before {
+        opacity: 0.8;
     }
 }
 
 @media (max-width: 480px) {
-    .video-grid {
+    .youtube-video-grid {
         grid-template-columns: 1fr;
+        gap: 15px;
     }
     
     .video-instruction {
         font-size: 0.9rem;
         padding: 12px 20px;
     }
+    
+    .youtube-video-overlay {
+        padding: 15px;
+    }
+}
+
+/* Loading state for YouTube videos */
+.youtube-video-item iframe {
+    background: #000;
+    transition: opacity 0.3s ease;
+}
+
+.youtube-video-item iframe:not([src]) {
+    opacity: 0.5;
+}
+
+/* Professional hover effects */
+.youtube-video-item {
+    cursor: pointer;
+}
+
+.youtube-video-item:hover {
+    transform: translateY(-10px) scale(1.02);
 }
