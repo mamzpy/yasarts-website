@@ -972,5 +972,219 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         initializePortfolioLightbox();
     }, 500);
+}
+
+);
+// Video Gallery JavaScript - Add this to your script.js file
+
+// Video Lightbox Functionality
+function initializeVideoLightbox() {
+    // Create video lightbox HTML structure
+    const videoLightboxHTML = `
+        <div id="videoLightbox" class="video-lightbox">
+            <div class="video-lightbox-content">
+                <button class="video-lightbox-close" onclick="closeVideoLightbox()">&times;</button>
+                <video id="lightboxVideo" controls>
+                    <source src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="video-lightbox-info">
+                    <h3 id="videoLightboxTitle"></h3>
+                    <p id="videoLightboxDescription"></p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add video lightbox to page
+    if (!document.getElementById('videoLightbox')) {
+        document.body.insertAdjacentHTML('beforeend', videoLightboxHTML);
+    }
+    
+    // Get all video items
+    const videoItems = document.querySelectorAll('.video-item');
+    
+    // Add click events to video items
+    videoItems.forEach((item, index) => {
+        const video = item.querySelector('video source');
+        const titleElement = item.querySelector('.video-info h3');
+        const descElement = item.querySelector('.video-info p');
+        
+        item.addEventListener('click', () => {
+            openVideoLightbox(
+                video.src,
+                titleElement.textContent,
+                descElement.textContent
+            );
+        });
+        
+        // Add hover effects for video preview
+        const videoElement = item.querySelector('video');
+        
+        item.addEventListener('mouseenter', () => {
+            // Play video on hover (muted)
+            if (videoElement.paused) {
+                videoElement.currentTime = 0;
+                videoElement.play().catch(e => {
+                    // Handle autoplay restrictions
+                    console.log('Autoplay prevented:', e);
+                });
+            }
+        });
+        
+        item.addEventListener('mouseleave', () => {
+            // Pause and reset video
+            videoElement.pause();
+            videoElement.currentTime = 0;
+        });
+    });
+    
+    // Video lightbox functions
+    window.openVideoLightbox = function(videoSrc, title, description) {
+        const lightbox = document.getElementById('videoLightbox');
+        const video = document.getElementById('lightboxVideo');
+        const videoTitle = document.getElementById('videoLightboxTitle');
+        const videoDesc = document.getElementById('videoLightboxDescription');
+        
+        // Set video source and info
+        video.src = videoSrc;
+        videoTitle.textContent = title;
+        videoDesc.textContent = description;
+        
+        // Show lightbox
+        lightbox.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // Auto-play video in lightbox
+        video.play().catch(e => {
+            console.log('Video play failed:', e);
+        });
+    };
+    
+    window.closeVideoLightbox = function() {
+        const lightbox = document.getElementById('videoLightbox');
+        const video = document.getElementById('lightboxVideo');
+        
+        // Pause and hide
+        video.pause();
+        video.currentTime = 0;
+        lightbox.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    };
+    
+    // Close video lightbox when clicking outside
+    document.addEventListener('click', function(event) {
+        const lightbox = document.getElementById('videoLightbox');
+        if (event.target === lightbox) {
+            closeVideoLightbox();
+        }
+    });
+    
+    // Keyboard controls for video lightbox
+    document.addEventListener('keydown', function(e) {
+        const lightbox = document.getElementById('videoLightbox');
+        if (lightbox.style.display === 'flex') {
+            switch(e.key) {
+                case 'Escape':
+                    closeVideoLightbox();
+                    break;
+                case ' ': // Spacebar to play/pause
+                    e.preventDefault();
+                    const video = document.getElementById('lightboxVideo');
+                    if (video.paused) {
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
+                    break;
+            }
+        }
+    });
+}
+
+// Update navigation to include Videos
+function updateNavigationWithVideos() {
+    const navMenu = document.querySelector('.nav-menu');
+    if (navMenu && !document.querySelector('a[href="#videos"]')) {
+        const videosNavItem = document.createElement('li');
+        videosNavItem.innerHTML = `
+            <a href="#videos" data-en="Videos" data-it="Video" data-fr="Vidéos">Videos</a>
+        `;
+        
+        // Insert after "Our Work" and before "About"
+        const aboutLink = navMenu.querySelector('a[href="#about"]');
+        if (aboutLink) {
+            aboutLink.parentElement.parentNode.insertBefore(videosNavItem, aboutLink.parentElement);
+        } else {
+            navMenu.appendChild(videosNavItem);
+        }
+        
+        // Update language content for new nav item
+        updateLanguageContent(currentLanguage);
+    }
+}
+
+// Video performance optimization
+function optimizeVideoPerformance() {
+    const videos = document.querySelectorAll('.video-item video');
+    
+    videos.forEach(video => {
+        // Set loading attribute
+        video.setAttribute('loading', 'lazy');
+        
+        // Preload metadata only
+        video.preload = 'metadata';
+        
+        // Add error handling
+        video.addEventListener('error', function(e) {
+            console.warn('Video failed to load:', this.src);
+            const container = this.closest('.video-item');
+            if (container) {
+                container.style.display = 'none';
+            }
+        });
+        
+        // Add loaded event
+        video.addEventListener('loadedmetadata', function() {
+            // Video metadata loaded successfully
+            this.classList.add('loaded');
+        });
+    });
+}
+
+// Initialize video functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Add delay to ensure other content loads first
+    setTimeout(() => {
+        initializeVideoLightbox();
+        updateNavigationWithVideos();
+        optimizeVideoPerformance();
+    }, 1000);
 });
+
+// Intersection Observer for lazy video loading
+function initializeVideoLazyLoading() {
+    if ('IntersectionObserver' in window) {
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const video = entry.target;
+                    const source = video.querySelector('source');
+                    if (source && !video.src) {
+                        video.src = source.src;
+                        video.load();
+                    }
+                    videoObserver.unobserve(video);
+                }
+            });
+        }, {
+            rootMargin: '50px'
+        });
+        
+        document.querySelectorAll('.video-item video').forEach(video => {
+            videoObserver.observe(video);
+        });
+    }
+}
+
 
